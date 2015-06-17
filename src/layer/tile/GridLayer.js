@@ -25,7 +25,7 @@ L.GridLayer = L.Layer.extend({
 		options = L.setOptions(this, options);
 	},
 
-	onAdd: function () {
+	onAdd: function (map) {
 		this._initContainer();
 
 		this._levels = {};
@@ -33,6 +33,7 @@ L.GridLayer = L.Layer.extend({
 
 		this._resetView();
 		this._update();
+		map.on('rotate', this._onMoveEnd, this);
 	},
 
 	beforeAdd: function (map) {
@@ -44,6 +45,7 @@ L.GridLayer = L.Layer.extend({
 		map._removeZoomLimit(this);
 		this._container = null;
 		this._tileZoom = null;
+		map.off('rotate', this._onMoveEnd, this);
 	},
 
 	bringToFront: function () {
@@ -427,11 +429,22 @@ L.GridLayer = L.Layer.extend({
 
 		var scale = this._map.getZoomScale(zoom, tileZoom),
 		    pixelCenter = map.project(center, tileZoom).floor(),
-		    halfSize = map.getSize().divideBy(scale * 2),
-		    pixelBounds = new L.Bounds(pixelCenter.subtract(halfSize), pixelCenter.add(halfSize)),
+		    size = map.getSize(),
+// 		    halfSize = size.divideBy(scale * 2),
+		    halfPaneSize = new L.Bounds([
+		        map.containerPointToLayerPoint([0, 0], tileZoom).floor(),
+		        map.containerPointToLayerPoint([size.x, 0], tileZoom).floor(),
+		        map.containerPointToLayerPoint([0, size.y], tileZoom).floor(),
+		        map.containerPointToLayerPoint([size.x, size.y], tileZoom).floor()
+		    ]).getSize().divideBy(scale * 2),
+		    pixelBounds = new L.Bounds(pixelCenter.subtract(halfPaneSize), pixelCenter.add(halfPaneSize)),
 		    tileRange = this._pxBoundsToTileRange(pixelBounds),
 		    tileCenter = tileRange.getCenter(),
 		    queue = [];
+
+// 		console.log('pxcenter:', pixelCenter);
+// 		console.log('px:', pixelBounds.min, pixelBounds.max);
+// 		console.log('tile:', tileRange.min, tileRange.max);
 
 		for (var key in this._tiles) {
 			this._tiles[key].current = false;
