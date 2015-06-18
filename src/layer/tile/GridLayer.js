@@ -432,10 +432,10 @@ L.GridLayer = L.Layer.extend({
 		    size = map.getSize(),
 // 		    halfSize = size.divideBy(scale * 2),
 		    halfPaneSize = new L.Bounds([
-		        map.containerPointToLayerPoint([0, 0], tileZoom).floor(),
-		        map.containerPointToLayerPoint([size.x, 0], tileZoom).floor(),
-		        map.containerPointToLayerPoint([0, size.y], tileZoom).floor(),
-		        map.containerPointToLayerPoint([size.x, size.y], tileZoom).floor()
+		        map.containerPointToLayerPoint([0, 0]          ).floor(),
+		        map.containerPointToLayerPoint([size.x, 0]     ).floor(),
+		        map.containerPointToLayerPoint([0, size.y]     ).floor(),
+		        map.containerPointToLayerPoint([size.x, size.y]).floor()
 		    ]).getSize().divideBy(scale * 2),
 		    pixelBounds = new L.Bounds(pixelCenter.subtract(halfPaneSize), pixelCenter.add(halfPaneSize)),
 		    tileRange = this._pxBoundsToTileRange(pixelBounds),
