@@ -481,7 +481,14 @@ L.Map = L.Evented.extend({
 
 
 	// Rotation methods
-	setBearing: function(theta, skipEvent) {
+	// setBearing will work with just the 'theta' parameter. skipEvent and pivot are
+	//   completely optional.
+	// Set theta to the desired bearing, in degrees.
+	// Set skipEvent to true in order to not fire the 'rotate' event. This is useful
+	//   when a lot of rotations are going to happen in a short period of time, e.g.
+	//   a touchscreen rotation. Make sure that a rotate event is sent at the end of
+	//   such a series of rotations.
+	setBearing: function(theta, skipEvent, pivot) {
 		if (!L.Browser.any3d) { return; }
 
 		var rotatePanePos = this._getRotatePanePos();
@@ -495,16 +502,9 @@ L.Map = L.Evented.extend({
 
 		L.DomUtil.setPosition(this._rotatePane, this._rotatePanePos, this._bearing, this._rotatePanePos);
 
-		for (var i in this._layers) {
-			// Consider doing this in the markers instead.
-			if (this._layers[i].options.pane === 'markerPane') {
-				this._layers[i].update();
-			}
-		}
-
 		// We don't want to fire the rotate event on every frame of a touchscreen
 		//   gesture
-		if (skipEvent) {
+		if (!skipEvent) {
 			this.fire('rotate');
 		}
 	},
