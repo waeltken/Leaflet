@@ -1,5 +1,5 @@
 /*
- Leaflet 1.0.0-beta.2 (76195b7), a JS library for interactive maps. http://leafletjs.com
+ Leaflet 1.0.0-beta.2 (cb0aa81), a JS library for interactive maps. http://leafletjs.com
  (c) 2010-2015 Vladimir Agafonkin, (c) 2010-2011 CloudMade
 */
 (function (window, document, undefined) {
