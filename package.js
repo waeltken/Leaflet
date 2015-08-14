@@ -14,11 +14,13 @@ Package.onUse(function(api) {
   api.versionsFrom('1.1.0.2');
   api.addFiles([
     'dist/leaflet.css',
-    'dist/leaflet-src.js',
+    'dist/leaflet-src.js'
+  ], 'client');
+  api.addFiles([
     'dist/images/layers-2x.png',
     'dist/images/layers.png',
     'dist/images/marker-icon-2x.png',
     'dist/images/marker-icon.png',
     'dist/images/marker-shadow.png'
-  ], 'client');
+  ], 'client', {isAsset: true});
 });
